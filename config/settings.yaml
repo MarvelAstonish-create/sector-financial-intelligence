@@ -9,7 +9,7 @@ paths:
   companies_config: "config/companies.yaml"
 
 edgar_api:
-  user_agent: "MarvelAstonish SectorFinancialIntelligence marvel.aryee@yahoo.com"
+  user_agent: "MarvelAstonish SectorFinancialIntelligence braaastor@gmail.com"
   base_url: "https://data.sec.gov/api/xbrl/companyfacts"
   requests_per_second: 4
   max_retries: 4
