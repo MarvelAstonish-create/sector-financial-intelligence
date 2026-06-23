@@ -1,0 +1,98 @@
+# =============================================================================
+# xbrl_tag_map.yaml
+# -----------------------------------------------------------------------------
+# Maps OUR standardized line-item names to the XBRL "us-gaap" concept tags
+# that companies use to report them.
+#
+# WHY THIS IS A LIST, NOT A SINGLE TAG PER LINE ITEM:
+# Companies don't all use the same XBRL tag for the same economic concept.
+# "Total Revenue" might be reported as RevenueFromContractWithCustomer...
+# (post-2018, ASC 606 standard) or as the legacy Revenues / SalesRevenueNet
+# tags (pre-2018, still occasionally present in historical comparatives).
+# We tried these against real AAPL/GOOGL data before writing this file —
+# see PHASE2_TAG_INVESTIGATION.md for the evidence.
+#
+# HOW THE NORMALIZER USES THIS:
+# For each company-year, walk the tag list IN ORDER. Use the first tag that
+# has a valid full-year (~365 day) datapoint for that fiscal year. Record
+# which tag was actually used in the output's `source_tag` column — this is
+# our audit trail. A line item resolving to NO tag at all is logged as a
+# data quality gap, not silently left blank.
+# =============================================================================
+
+income_statement:
+  total_revenue:
+    - "RevenueFromContractWithCustomerExcludingAssessedTax"
+    - "RevenueFromContractWithCustomerIncludingAssessedTax"
+    - "Revenues"
+    - "SalesRevenueNet"
+
+  cost_of_revenue:
+    - "CostOfGoodsAndServicesSold"
+    - "CostOfRevenue"
+    - "CostOfGoodsSold"
+
+  gross_profit:
+    - "GrossProfit"
+    # Note: if missing, Phase 2 logic will compute it as total_revenue minus
+    # cost_of_revenue rather than leaving it blank — but we still try the
+    # direct tag first, since a company-reported figure is more authoritative
+    # than a derived one (it reflects exactly what they intended to disclose).
+
+  operating_income:
+    - "OperatingIncomeLoss"
+
+  net_income:
+    - "NetIncomeLoss"
+    - "ProfitLoss"
+
+  research_and_development_expense:
+    - "ResearchAndDevelopmentExpense"
+
+  sga_expense:
+    - "SellingGeneralAndAdministrativeExpense"
+
+  diluted_eps:
+    - "EarningsPerShareDiluted"
+
+balance_sheet:
+  total_assets:
+    - "Assets"
+
+  total_liabilities:
+    - "Liabilities"
+
+  total_equity:
+    - "StockholdersEquity"
+    - "StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest"
+
+  cash_and_equivalents:
+    - "CashAndCashEquivalentsAtCarryingValue"
+    - "CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents"
+
+  current_assets:
+    - "AssetsCurrent"
+
+  current_liabilities:
+    - "LiabilitiesCurrent"
+
+  total_debt_long_term:
+    - "LongTermDebtNoncurrent"
+    - "LongTermDebt"
+
+cash_flow_statement:
+  operating_cash_flow:
+    - "NetCashProvidedByUsedInOperatingActivities"
+
+  investing_cash_flow:
+    - "NetCashProvidedByUsedInInvestingActivities"
+
+  financing_cash_flow:
+    - "NetCashProvidedByUsedInFinancingActivities"
+
+  capital_expenditures:
+    - "PaymentsToAcquirePropertyPlantAndEquipment"
+
+  depreciation_and_amortization:
+    - "DepreciationDepletionAndAmortization"
+    - "DepreciationAmortizationAndAccretionNet"

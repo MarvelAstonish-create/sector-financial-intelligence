@@ -1,0 +1,75 @@
+companies:
+  - ticker: AAPL
+    name: "Apple Inc."
+    cik: 320193
+    subsector: "Hardware & Devices"
+
+  - ticker: MSFT
+    name: "Microsoft Corporation"
+    cik: 789019
+    subsector: "Software & Cloud"
+
+  - ticker: GOOGL
+    name: "Alphabet Inc."
+    cik: 1652044
+    subsector: "Internet & Advertising"
+
+  - ticker: AMZN
+    name: "Amazon.com Inc."
+    cik: 1018724
+    subsector: "E-Commerce & Cloud"
+
+  - ticker: META
+    name: "Meta Platforms Inc."
+    cik: 1326801
+    subsector: "Internet & Advertising"
+
+  - ticker: NVDA
+    name: "NVIDIA Corporation"
+    cik: 1045810
+    subsector: "Semiconductors"
+
+  - ticker: ORCL
+    name: "Oracle Corporation"
+    cik: 1341439
+    subsector: "Software & Cloud"
+
+  - ticker: CRM
+    name: "Salesforce Inc."
+    cik: 1108524
+    subsector: "Software & Cloud"
+
+  - ticker: ADBE
+    name: "Adobe Inc."
+    cik: 796343
+    subsector: "Software & Cloud"
+
+  - ticker: INTC
+    name: "Intel Corporation"
+    cik: 50863
+    subsector: "Semiconductors"
+
+  - ticker: CSCO
+    name: "Cisco Systems Inc."
+    cik: 858877
+    subsector: "Networking Hardware"
+
+  - ticker: IBM
+    name: "International Business Machines Corp."
+    cik: 51143
+    subsector: "IT Services & Hardware"
+
+  - ticker: AVGO
+    name: "Broadcom Inc."
+    cik: 1730168
+    subsector: "Semiconductors"
+
+  - ticker: TXN
+    name: "Texas Instruments Inc."
+    cik: 97476
+    subsector: "Semiconductors"
+
+  - ticker: QCOM
+    name: "QUALCOMM Inc."
+    cik: 804328
+    subsector: "Semiconductors"

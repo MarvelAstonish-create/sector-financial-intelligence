@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.Python
+venv/
+env/
+*.egg-info/
+
+# Project data (regenerable via the extraction/cleaning pipeline)
+data/raw/*.json
+data/processed/*.csv
+data/processed/*.parquet
+logs/*.log
+
+# Keep folder structure tracked even though contents are ignored
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!logs/.gitkeep
+
+# macOS
+.DS_Store
+
+# Editor/IDE
+.vscode/
+*.swp
+
+# Environment secrets
+.env

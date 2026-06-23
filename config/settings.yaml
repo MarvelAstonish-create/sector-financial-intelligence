@@ -1,0 +1,23 @@
+fiscal_years:
+  start: 2019
+  end: 2023
+
+paths:
+  raw_data_dir: "data/raw"
+  processed_data_dir: "data/processed"
+  log_dir: "logs"
+  companies_config: "config/companies.yaml"
+
+edgar_api:
+  user_agent: "MarvelAstonish SectorFinancialIntelligence marvel.aryee@yahoo.com"
+  base_url: "https://data.sec.gov/api/xbrl/companyfacts"
+  requests_per_second: 4
+  max_retries: 4
+  backoff_base_seconds: 2
+  request_timeout_seconds: 15
+
+logging:
+  level: "INFO"
+  log_file: "logs/extraction.log"
+  max_bytes: 5000000
+  backup_count: 3

@@ -1,0 +1,7 @@
+# Sector Financial Intelligence Platform — Phase 1 (Extraction) dependencies
+# Install with: pip install -r requirements.txt --break-system-packages
+# (macOS note: if you're using a venv instead, drop --break-system-packages)
+
+requests>=2.31.0       # HTTP calls to SEC EDGAR API
+pyyaml>=6.0            # Reading config/*.yaml files
+python-dotenv>=1.0.0   # For loading secrets (e.g. AI API keys) later, kept here now for consistency
