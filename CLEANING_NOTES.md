@@ -110,3 +110,16 @@ warrant its own dedicated treatment once we reach KPI design in Phase 4.)*
 - Stock-based compensation treatment consistency across companies — flagged
   for later review, not yet resolved.
 - Lease accounting (ASC 842) comparability — flagged for later review.
+
+**Residual gap, investigated and confirmed genuine (not a bug):** after
+adding this fallback, AMZN and INTC STILL show total_liabilities as
+MISSING for several years. Traced directly: AMZN's LiabilitiesNoncurrent
+tag has exactly ONE datapoint in its entire reporting history - fiscal
+year 2011, fourteen years before our FY2019-2023 window. Amazon evidently
+stopped using this specific XBRL tag after 2011, likely restructuring how
+they present balance sheet liabilities in later filings. The fallback
+correctly attempted resolution, correctly found no applicable data, and
+correctly returned a logged MISSING rather than fabricating a number
+(e.g. assuming zero noncurrent liabilities, which would have understated
+Amazon's true total liabilities). This is the documented fallback policy
+working exactly as intended on a genuine data gap, not a defect to fix.

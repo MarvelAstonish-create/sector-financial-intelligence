@@ -30,7 +30,7 @@ needing to consult this code.
 from dataclasses import dataclass
 from typing import Optional
 
-from xbrl_resolver import ResolvedFact
+from xbrl_resolver import ResolvedFact, resolve_annual_fact
 
 
 COMPUTED_TAG_PREFIX = "COMPUTED: "
@@ -49,6 +49,8 @@ class ResolvedLineItems:
     research_and_development_expense: Optional[ResolvedFact] = None
     sga_expense: Optional[ResolvedFact] = None
     operating_income: Optional[ResolvedFact] = None
+    total_liabilities: Optional[ResolvedFact] = None
+    current_liabilities: Optional[ResolvedFact] = None
     # Additional fields will be added here as more fallback rules are
     # introduced (see CLEANING_NOTES.md section 3 for the full policy).
 
@@ -149,6 +151,35 @@ def apply_operating_income_fallback(items: ResolvedLineItems) -> Optional[Resolv
         period_end=items.gross_profit.period_end,
         filed_date=items.gross_profit.filed_date,
         accession_number=items.gross_profit.accession_number,
+    )
+
+
+def apply_total_liabilities_fallback(items, company_facts, fiscal_year):
+    if items.total_liabilities is not None:
+        return items.total_liabilities
+
+    if items.current_liabilities is None:
+        return None
+
+    noncurrent = resolve_annual_fact(
+        company_facts, ["LiabilitiesNoncurrent"], fiscal_year, fact_type="instant"
+    )
+    if noncurrent is None:
+        return None
+
+    if items.current_liabilities.fiscal_year != noncurrent.fiscal_year:
+        return None
+
+    computed_value = items.current_liabilities.value + noncurrent.value
+
+    return ResolvedFact(
+        fiscal_year=items.current_liabilities.fiscal_year,
+        value=computed_value,
+        source_tag=f"{COMPUTED_TAG_PREFIX}current_liabilities + LiabilitiesNoncurrent",
+        period_start=items.current_liabilities.period_start,
+        period_end=items.current_liabilities.period_end,
+        filed_date=items.current_liabilities.filed_date,
+        accession_number=items.current_liabilities.accession_number,
     )
 
 

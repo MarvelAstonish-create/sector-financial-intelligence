@@ -1,0 +1,18 @@
+{
+  "fiscal_years": {
+    "start": 2019,
+    "end": 2023
+  },
+  "total_companies": 15,
+  "companies_skipped": [],
+  "total_values_attempted": 1500,
+  "resolved_directly": 1260,
+  "resolved_via_fallback": 30,
+  "missing": 210,
+  "missing_rate_pct": 14.0,
+  "output_files": {
+    "income_statement": "data/processed/income_statement.csv",
+    "balance_sheet": "data/processed/balance_sheet.csv",
+    "cash_flow_statement": "data/processed/cash_flow_statement.csv"
+  }
+}
