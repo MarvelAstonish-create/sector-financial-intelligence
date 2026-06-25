@@ -123,3 +123,29 @@ correctly returned a logged MISSING rather than fabricating a number
 (e.g. assuming zero noncurrent liabilities, which would have understated
 Amazon's true total liabilities). This is the documented fallback policy
 working exactly as intended on a genuine data gap, not a defect to fix.
+
+## Peer/Subsector Comparison Limitation (Phase 4)
+
+Subsector medians are only statistically meaningful for groups with
+multiple companies. In our 15-company set:
+
+| Subsector | Companies | Peer comparison meaningful? |
+|---|---|---|
+| Semiconductors | NVDA, INTC, AVGO, TXN, QCOM (5) | Yes |
+| Software & Cloud | MSFT, ORCL, CRM, ADBE (4) | Yes |
+| Internet & Advertising | GOOGL, META (2) | Marginal - only 2 data points |
+| Hardware & Devices | AAPL (1) | No - "median" is just the company's own value |
+| E-Commerce & Cloud | AMZN (1) | No - same limitation |
+| Networking Hardware | CSCO (1) | No - same limitation |
+| IT Services & Hardware | IBM (1) | No - same limitation |
+
+For single-company subsectors, `subsector_median_gross_margin` in
+04_peer_ranking.sql will always equal that company's own gross_margin,
+and `gross_margin_variance_vs_subsector` will always be exactly 0 - this
+is mathematically correct, not a bug, but it means no real peer insight
+exists for those companies. Any dashboard or report built on this query
+should clearly flag single-company subsectors rather than presenting a
+"vs. peer median" figure that implies a comparison happened when it
+didn't. A genuine fix would require expanding company coverage beyond 15
+firms - noted as a possible future enhancement, out of scope for this
+project's current phase.
