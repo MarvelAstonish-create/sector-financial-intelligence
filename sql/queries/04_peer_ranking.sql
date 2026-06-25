@@ -50,10 +50,12 @@ SELECT
     ROUND(w.gross_margin, 4) AS gross_margin,
     ROUND(sm.median_gross_margin::numeric, 4) AS subsector_median_gross_margin,
     ROUND(w.gross_margin - sm.median_gross_margin::numeric, 4) AS gross_margin_variance_vs_subsector,
-    ROUND(
-        (PERCENT_RANK() OVER (PARTITION BY w.subsector, w.fiscal_year ORDER BY w.gross_margin))::numeric,
-        4
-    ) AS gross_margin_percentile_in_subsector,
+    CASE WHEN w.gross_margin IS NOT NULL THEN
+        ROUND(
+            (PERCENT_RANK() OVER (PARTITION BY w.subsector, w.fiscal_year ORDER BY w.gross_margin))::numeric,
+            4
+        )
+    ELSE NULL END AS gross_margin_percentile_in_subsector,
     ROUND(w.net_margin, 4) AS net_margin,
     ROUND(sm.median_net_margin::numeric, 4) AS subsector_median_net_margin
 FROM with_subsector w
