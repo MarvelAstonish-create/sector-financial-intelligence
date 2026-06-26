@@ -1,8 +1,8 @@
 # Sector Financial Intelligence Platform
 
-A multi-company financial analytics platform built on real SEC EDGAR filing data — covering 15 technology companies across FY2019–2023. Built end-to-end: Python ETL → PostgreSQL data warehouse → SQL analytics layer, with Tableau dashboards and AI-assisted insights in progress.
+A multi-company financial analytics platform built on real SEC EDGAR filing data — covering 15 technology companies across FY2019–2023. Built end-to-end: Python ETL → PostgreSQL data warehouse → semantic layer → SQL analytics layer, with Tableau dashboards and AI-assisted insights in progress.
 
-**Status: Work in progress.** Phases 0–4 are complete and verified. See the Roadmap below for what's done and what's next.
+**Status: Work in progress.** Phases 0–4 are complete; a June 2026 audit fixed a real defect in the peer-ranking SQL and added a semantic layer for canonical metric definitions — see `CLEANING_NOTES.md` for details. See the Roadmap below for what's done and what's next.
 
 ---
 
@@ -40,6 +40,11 @@ PostgreSQL (sql/schema.sql)
   Star schema: dim_company, dim_line_item, fact_financials
       │
       ▼
+Semantic Layer (sql/semantic/semantic_layer.sql)
+  Canonical metric definitions: margins, peer comparisons, growth rates
+     |
+     v
+
 SQL Analysis Layer (sql/queries/)
   ├─ 01_cash_flow_analysis.sql   → FCF, FCF margin, cash flow quality
   ├─ 02_core_ratios.sql          → profitability, returns, liquidity, leverage
@@ -60,7 +65,8 @@ Every line item resolved from EDGAR's raw data carries a `source_tag` audit trai
 Every judgment call behind these decisions — including real bugs found and fixed along the way — is written up in [`CLEANING_NOTES.md`](./CLEANING_NOTES.md). A few highlights from that log:
 - A bug that caused every balance sheet value to silently fail for every company, traced to the difference between "point in time" and "over a period" financial facts
 - Discovering that Amazon stopped using a specific reporting tag back in 2011 — a genuine data limitation, not a code defect
-- Two real PostgreSQL quirks hit (and documented) while building peer-ranking SQL
+- Two real PostgreSQL quirks hit (and documented) while building peer-ranking SQL, plus a third found in a later audit: `PERCENT_RANK()` was ranking `NULL` gross-margin values as the *top* percentile instead of excluding them - fixed in `04_peer_ranking.sql` (June 2026)
+- Metric logic (margins, peer comparisons, growth rates) consolidated into a single semantic layer (`sql/semantic/semantic_layer.sql`), so each calculation is defined once instead of being reimplemented per query
 
 ## Roadmap
 
@@ -70,12 +76,14 @@ Every judgment call behind these decisions — including real bugs found and fix
 | 1 | EDGAR data ingestion | Done |
 | 2 | Data cleaning & normalization | Done |
 | 3 | PostgreSQL star schema & loader | Done |
-| 4 | SQL analysis layer | Done |
+| 4 | SQL analysis layer | Done* |
 | 5 | Python statistical analysis & forecasting | Planned |
 | 6 | AI-assisted insight generation, NL querying | Planned |
 | 7 | Tableau dashboards | In progress |
 | 8 | Business communication (exec summary) | Planned |
 | 9 | Portfolio packaging & polish | Planned |
+
+*Extended June 2026 with a semantic layer (`sql/semantic/`) defining canonical metrics once. The Phase 4 queries above still contain their own duplicate logic, pending a refactor to consume it directly.
 
 ## Tech stack
 
